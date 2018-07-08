@@ -42,14 +42,6 @@ public class Porudzbina implements Serializable {
     private Integer id;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "isporucena")
-    private boolean isporucena;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "placeno")
-    private boolean placeno;
-    @Basic(optional = false)
-    @NotNull
     @Column(name = "datum")
     @Temporal(TemporalType.DATE)
     private Date datum;
@@ -57,7 +49,7 @@ public class Porudzbina implements Serializable {
     @ManyToOne
     private Korisnik korisnikId;
     @OneToMany(mappedBy = "porudzbinaId")
-    private List<PicaPorudzbina> picaPorudzbinaList;
+    private List<StavkaPorudzbine> picaPorudzbinaList;
 
     public Porudzbina() {
     }
@@ -66,10 +58,8 @@ public class Porudzbina implements Serializable {
         this.id = id;
     }
 
-    public Porudzbina(Integer id, boolean isporucena, boolean placeno, Date datum) {
+    public Porudzbina(Integer id, Date datum) {
         this.id = id;
-        this.isporucena = isporucena;
-        this.placeno = placeno;
         this.datum = datum;
     }
 
@@ -79,22 +69,6 @@ public class Porudzbina implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public boolean getIsporucena() {
-        return isporucena;
-    }
-
-    public void setIsporucena(boolean isporucena) {
-        this.isporucena = isporucena;
-    }
-
-    public boolean getPlaceno() {
-        return placeno;
-    }
-
-    public void setPlaceno(boolean placeno) {
-        this.placeno = placeno;
     }
 
     public Date getDatum() {
@@ -114,11 +88,11 @@ public class Porudzbina implements Serializable {
     }
 
     @XmlTransient
-    public List<PicaPorudzbina> getPicaPorudzbinaList() {
+    public List<StavkaPorudzbine> getPicaPorudzbinaList() {
         return picaPorudzbinaList;
     }
 
-    public void setPicaPorudzbinaList(List<PicaPorudzbina> picaPorudzbinaList) {
+    public void setPicaPorudzbinaList(List<StavkaPorudzbine> picaPorudzbinaList) {
         this.picaPorudzbinaList = picaPorudzbinaList;
     }
 

@@ -25,8 +25,8 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Marija
  */
 @Entity
-@Table(name = "pica_porudzbina")
-public class PicaPorudzbina implements Serializable {
+@Table(name = "stavka_porudzbine")
+public class StavkaPorudzbine implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -45,14 +45,14 @@ public class PicaPorudzbina implements Serializable {
     @ManyToOne
     private Porudzbina porudzbinaId;
 
-    public PicaPorudzbina() {
+    public StavkaPorudzbine() {
     }
 
-    public PicaPorudzbina(Integer id) {
+    public StavkaPorudzbine(Integer id) {
         this.id = id;
     }
 
-    public PicaPorudzbina(Integer id, int kolicina) {
+    public StavkaPorudzbine(Integer id, int kolicina) {
         this.id = id;
         this.kolicina = kolicina;
     }
@@ -99,10 +99,10 @@ public class PicaPorudzbina implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof PicaPorudzbina)) {
+        if (!(object instanceof StavkaPorudzbine)) {
             return false;
         }
-        PicaPorudzbina other = (PicaPorudzbina) object;
+        StavkaPorudzbine other = (StavkaPorudzbine) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }

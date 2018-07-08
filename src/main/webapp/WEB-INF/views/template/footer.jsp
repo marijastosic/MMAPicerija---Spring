@@ -34,7 +34,7 @@
     <!-- Call to action -->
     <hr>
     <div class="footer-copyright text-center py-3" style="background-color: #222; color: whitesmoke;">© 2018 MMA Picerija:
-        <a href="<c:url value="/views/home.jsp"/>"> MMAPicerija.com</a>
+        <a href="<c:url value="/"/>"> MMAPicerija.com</a>
     </div>
 
 </footer>

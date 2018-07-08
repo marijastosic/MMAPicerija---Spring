@@ -35,9 +35,9 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a href="<c:url value="/views/home.jsp"/>"> <img src="<c:url value="/resources/images/logo_pizzerija.PNG"/>"
+                    <a href="<c:url value="/"/>"> <img src="<c:url value="/resources/images/logo_pizzerija.PNG"/>"
                          style="position: relative; right: 30px; bottom: 5px; height:73px;" class="navbar-brand"/>
-                    <a href="<c:url value="/views/home.jsp"/>" class="navbar-brand">MMA Picerija</a>
+                    <a href="<c:url value="/"/>" class="navbar-brand">MMA Picerija</a>
                 </div>
 
                 <!-- Menu Items -->
@@ -48,9 +48,18 @@
 
                         <li><a href="<c:url value="/meni"/>">Meni</a></li> 
                     </ul>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li> <a href="<c:url value="/login"/>">Login/Register</a></li>
-                    </ul>     
+                    <c:if test="${pageContext.request.userPrincipal.name != null}">
+                    	<ul class="nav navbar-nav navbar-right">
+							<li><a href="#">Dobrodošli: ${pageContext.request.userPrincipal.name}</a></li>
+							<li><a href="<c:url value="/j_spring_security_logout" />">Odjavi se</a></li>
+						</ul>  
+                    </c:if>
+                    <c:if test="${pageContext.request.userPrincipal.name == null}">
+                    	<ul class="nav navbar-nav navbar-right">
+							<li><a href="<c:url value="/login" />">Prijavljivanje</a></li>
+							<li><a href="<c:url value="/registracija" />">Registracija</a></li>
+						</ul>  
+					</c:if>   
                 </div>
 
             </div>

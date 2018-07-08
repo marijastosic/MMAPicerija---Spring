@@ -76,9 +76,6 @@ public class Korisnik implements Serializable {
     private String adresa;
     @OneToMany(mappedBy = "korisnikId")
     private List<Porudzbina> porudzbinaList;
-    @JoinColumn(name = "rola_id", referencedColumnName = "id")
-    @ManyToOne
-    private Rola rolaId;
 
     public Korisnik() {
     }
@@ -169,14 +166,6 @@ public class Korisnik implements Serializable {
 
     public void setPorudzbinaList(List<Porudzbina> porudzbinaList) {
         this.porudzbinaList = porudzbinaList;
-    }
-
-    public Rola getRolaId() {
-        return rolaId;
-    }
-
-    public void setRolaId(Rola rolaId) {
-        this.rolaId = rolaId;
     }
 
     @Override
