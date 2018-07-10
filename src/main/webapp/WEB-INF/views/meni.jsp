@@ -19,7 +19,7 @@
 			<p style="text-align: center;">
 				<a class="btn btn-default"
 					href="<c:url value="/meni/${pica.id}"/>" role="button">Vidi
-					detalje&raquo;</a>
+					detalje &raquo;</a>
 			</p>
 		</div>
 

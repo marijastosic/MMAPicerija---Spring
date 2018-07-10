@@ -54,6 +54,21 @@ public class StavkaKorpeDAOImpl implements StavkaKorpeDAO {
 		}
 	}
 
+	@Override
+	public StavkaKorpe vratiStavkuZaPicuIKorisnika(Pica pica, Korisnik korisnik) {
+		Session session = sessionFactory.getCurrentSession();
+		return (StavkaKorpe)session.createCriteria(StavkaKorpe.class)
+				.add(Restrictions.eq("picaId", pica))
+				.add(Restrictions.eq("korisnikId", korisnik)).uniqueResult();
+ 	}
+
+	@Override
+	public void azurirajStavku(StavkaKorpe stavkaKorpe) {
+		Session session = sessionFactory.getCurrentSession();
+		session.update(stavkaKorpe);
+		session.flush();
+	}
+
 	
 
 }

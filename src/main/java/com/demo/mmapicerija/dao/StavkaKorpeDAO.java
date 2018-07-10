@@ -11,5 +11,7 @@ public interface StavkaKorpeDAO {
 	public List<StavkaKorpe> procitajSveIzStavkeKorpe(Korisnik korisnik);
 	public void obrisiStavkuKorpeById(int id);
 	public void ocistiKorpu(Korisnik korisnik);
+	public StavkaKorpe vratiStavkuZaPicuIKorisnika(Pica pica, Korisnik korisnik);
+	public void azurirajStavku(StavkaKorpe stavkaKorpe);
 }
 

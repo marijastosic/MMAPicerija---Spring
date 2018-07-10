@@ -48,6 +48,9 @@
 
                         <li><a href="<c:url value="/meni"/>">Meni</a></li> 
                     </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                    <li><a href="<c:url value="/korpa" />" class="btn btn-outline-primary"><span
+							class="glyphicon glyphicon-shopping-cart"></span> Korpa</a></li> 
                     <c:if test="${pageContext.request.userPrincipal.name != null}">
                     	<ul class="nav navbar-nav navbar-right">
 							<li><a href="#">Dobrodošli: ${pageContext.request.userPrincipal.name}</a></li>

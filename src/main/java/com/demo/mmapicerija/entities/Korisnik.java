@@ -78,6 +78,11 @@ public class Korisnik implements Serializable {
     @Size(min = 1, max = 50, message = "(Adresa mora imati između 1 i 50 karaktera)")
     @Column(name = "adresa")
     private String adresa;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 10, message = "(Morate odabrati pol)")
+    @Column(name = "pol")
+    private String pol;
     @OneToMany(mappedBy = "korisnikId")
     private List<Porudzbina> porudzbinaList;
     @OneToMany(mappedBy = "korisnikId")
@@ -90,7 +95,7 @@ public class Korisnik implements Serializable {
         this.id = id;
     }
 
-    public Korisnik(Integer id, String username, String password, String email, String ime, String prezime, String telefon, String adresa) {
+    public Korisnik(Integer id, String username, String password, String email, String ime, String prezime, String telefon, String adresa, String pol) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -99,6 +104,7 @@ public class Korisnik implements Serializable {
         this.prezime = prezime;
         this.telefon = telefon;
         this.adresa = adresa;
+        this.pol = pol;
     }
 
     public Integer getId() {
@@ -164,8 +170,17 @@ public class Korisnik implements Serializable {
     public void setAdresa(String adresa) {
         this.adresa = adresa;
     }
+    
 
-    @XmlTransient
+    public String getPol() {
+		return pol;
+	}
+
+	public void setPol(String pol) {
+		this.pol = pol;
+	}
+
+	@XmlTransient
     public List<Porudzbina> getPorudzbinaList() {
         return porudzbinaList;
     }

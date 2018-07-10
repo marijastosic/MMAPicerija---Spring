@@ -1,5 +1,8 @@
 package com.demo.mmapicerija;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -21,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.demo.mmapicerija.dao.KorisnikDAO;
 import com.demo.mmapicerija.dao.PicaDAO;
 import com.demo.mmapicerija.dao.StavkaKorpeDAO;
+import com.demo.mmapicerija.dao.StavkaPorudzbineDAO;
 import com.demo.mmapicerija.entities.Korisnik;
 import com.demo.mmapicerija.entities.Pica;
 import com.demo.mmapicerija.entities.StavkaKorpe;
@@ -88,11 +92,20 @@ public class HomeController {
 		Pica pica = picaDao.getPicaById(id);
 		stavkaKorpe.setPicaId(pica);
 		
-		Korisnik korisnik = korisnikDao.getKorisnikByUsername(request.getUserPrincipal().getName());
 		
+		Korisnik korisnik = korisnikDao.getKorisnikByUsername(request.getUserPrincipal().getName());
+
 		stavkaKorpe.setKorisnikId(korisnik);
 		
-		stavkaKorpeDao.sacuvajStavkuKorpe(stavkaKorpe);
+		StavkaKorpe stavkaIzBaze = stavkaKorpeDao.vratiStavkuZaPicuIKorisnika(pica, korisnik);
+		
+		if(stavkaIzBaze != null) {
+			stavkaIzBaze.setKolicina(stavkaIzBaze.getKolicina() + stavkaKorpe.getKolicina());
+			stavkaKorpeDao.azurirajStavku(stavkaIzBaze);
+		} else {
+			stavkaKorpeDao.sacuvajStavkuKorpe(stavkaKorpe);
+		}
+		
 		
 		StavkaKorpe stavkaKorpeNova = new StavkaKorpe();
 		stavkaKorpeNova.setKolicina(1);
@@ -106,7 +119,15 @@ public class HomeController {
 	public String korpa(Model model, HttpServletRequest request) {	
 		Korisnik korisnik = korisnikDao.getKorisnikByUsername(request.getUserPrincipal().getName());
 	    List<StavkaKorpe> listaStavkiKorpe = stavkaKorpeDao.procitajSveIzStavkeKorpe(korisnik);
+	    
+	    double ukupanIznos = 0;
+	    
+	    for(StavkaKorpe sk : listaStavkiKorpe) {
+	    	ukupanIznos += (sk.getPicaId().getCena() * sk.getKolicina());
+	    }
+	    model.addAttribute("ukupanIznos", ukupanIznos);
 		model.addAttribute("listaStavkiKorpe", listaStavkiKorpe);
+		
 		return "korpa";
 	}
 
@@ -114,6 +135,7 @@ public class HomeController {
 	public String ocistiKorpu(Model model, HttpServletRequest request) {
 		Korisnik korisnik = korisnikDao.getKorisnikByUsername(request.getUserPrincipal().getName());
 	    stavkaKorpeDao.ocistiKorpu(korisnik);
+	    model.addAttribute("ukupanIznos", 0.0);
 		return "korpa";
 	}
 	@RequestMapping(value = "/obrisiStavku/{id}", method = RequestMethod.GET)
@@ -121,8 +143,30 @@ public class HomeController {
 	    stavkaKorpeDao.obrisiStavkuKorpeById(id);
 	    Korisnik korisnik = korisnikDao.getKorisnikByUsername(request.getUserPrincipal().getName());
 	    List<StavkaKorpe> listaStavkiKorpe = stavkaKorpeDao.procitajSveIzStavkeKorpe(korisnik);
+    	double ukupanIznos = 0.0;
+	    
+	    for(StavkaKorpe sk : listaStavkiKorpe) {
+	    	ukupanIznos += (sk.getPicaId().getCena() * sk.getKolicina());
+	    }
+	    model.addAttribute("ukupanIznos", ukupanIznos);
 		model.addAttribute("listaStavkiKorpe", listaStavkiKorpe);
 		return "korpa";
+	}
+	
+	@RequestMapping(value = "/proveraPodataka", method = RequestMethod.GET)
+	public String proveraPodataka(Model model, HttpServletRequest request) {	
+		Korisnik korisnik = korisnikDao.getKorisnikByUsername(request.getUserPrincipal().getName());
+		model.addAttribute("korisnik", korisnik);
+		return "proveraPodataka";
+	}
+	
+	
+	@RequestMapping(value = "/kupovina", method = RequestMethod.GET)
+	public String kupovina(Model model, HttpServletRequest request) {	
+		Korisnik k = korisnikDao.getKorisnikByUsername(request.getUserPrincipal().getName());
+		System.out.println("KOr "+k.getIme());
+		model.addAttribute("k", k);
+		return "kupovina";
 	}
 	
 	@RequestMapping("/login")
@@ -137,6 +181,28 @@ public class HomeController {
         return "login";
     }
 		
+	
+	@RequestMapping(value = "/racun", method = RequestMethod.POST)
+	public String racun(@Valid @ModelAttribute("korisnik") Korisnik korisnik, BindingResult result, Model model, HttpServletRequest request) {
+		double ukupanIznos = 0.0;
+	
+		Korisnik korisnikIzBaze = korisnikDao.getKorisnikByUsername(request.getUserPrincipal().getName());
+		for(StavkaKorpe sk : stavkaKorpeDao.procitajSveIzStavkeKorpe(korisnikIzBaze)) {
+			ukupanIznos += (sk.getPicaId().getCena() * sk.getKolicina());
+		}
+		
+		
+		model.addAttribute("listaStavkiKorpe", stavkaKorpeDao.procitajSveIzStavkeKorpe(korisnikIzBaze));
+		
+		korisnik.setIme(korisnikIzBaze.getIme());
+		korisnik.setPrezime(korisnikIzBaze.getPrezime());
+		model.addAttribute("korisnik", korisnik);
+		model.addAttribute("ukupanIznos", ukupanIznos);
+		DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy.");
+		model.addAttribute("datum", dateFormat.format(new Date()));
+		
+		return "racun";
+	}
 	
 	@RequestMapping(value = "/registracija", method = RequestMethod.GET)
 	public String registracija(Model model) {
@@ -171,4 +237,5 @@ public class HomeController {
 		model.addAttribute("username", korisnik.getUsername());
 		return "login";
 	}
+	
 }

@@ -23,6 +23,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -45,6 +46,16 @@ public class Porudzbina implements Serializable {
     @Column(name = "datum")
     @Temporal(TemporalType.DATE)
     private Date datum;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "telefon")
+    @Size(min = 1, max = 50, message = "(Telefon mora imati između 1 i 50 karaktera")
+    private String telefon;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "adresa")
+    @Size(min = 1, max = 50, message = "(Adresa mora imati između 1 i 50 karaktera")
+    private String adresa;
     @JoinColumn(name = "korisnik_id", referencedColumnName = "id")
     @ManyToOne
     private Korisnik korisnikId;
@@ -58,9 +69,11 @@ public class Porudzbina implements Serializable {
         this.id = id;
     }
 
-    public Porudzbina(Integer id, Date datum) {
+    public Porudzbina(Integer id, Date datum, String telefon, String adresa) {
         this.id = id;
         this.datum = datum;
+        this.telefon = telefon;
+        this.adresa = adresa;
     }
 
     public Integer getId() {
@@ -78,8 +91,25 @@ public class Porudzbina implements Serializable {
     public void setDatum(Date datum) {
         this.datum = datum;
     }
+    
 
-    public Korisnik getKorisnikId() {
+    public String getTelefon() {
+		return telefon;
+	}
+
+	public void setTelefon(String telefon) {
+		this.telefon = telefon;
+	}
+
+	public String getAdresa() {
+		return adresa;
+	}
+
+	public void setAdresa(String adresa) {
+		this.adresa = adresa;
+	}
+
+	public Korisnik getKorisnikId() {
         return korisnikId;
     }
 
