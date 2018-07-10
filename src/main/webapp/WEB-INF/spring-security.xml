@@ -12,7 +12,7 @@
 			access="ROLE_ADMIN" />
 		<security:intercept-url pattern="/user/**"
 			access="ROLE_USER" />
-		<security:intercept-url pattern="/rezervacija/**"
+		<security:intercept-url pattern="/dodajUKorpu/**"
 			access="ROLE_USER" />
 		<security:access-denied-handler error-page="/403" />
 		<security:form-login login-page="/login"

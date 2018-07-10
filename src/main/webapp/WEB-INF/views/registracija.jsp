@@ -1,6 +1,6 @@
 <%@include file="template/header.jsp"%>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <div id="fullscreen_bg" class="fullscreen_bg"/>
 <div id="regContainer" class="container">
@@ -14,7 +14,10 @@
               <h1 style="text-align: center;">Registracija</h1>
               
               <hr>
-                <form:form id="register-form" action="${pageContext.request.contextPath}/registracija" method="post" role="form" commandName="korisnik">
+              <c:if test="${not empty error}">
+                  <div class="error" style="color: #ff0000; text-align: center;">${error}</div>
+              </c:if>
+                <form:form id="register-form" action="${pageContext.request.contextPath}/registracija" method="post" role="form" modelAttribute="korisnik">
                   <div class="form-group">
                     <label for="username">Username</label> <form:errors path="username" cssStyle="color: #ff0000" />
                     <form:input path="username" id="username" class="form-control" placeholder="Username"/>

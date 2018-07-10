@@ -23,7 +23,6 @@
               </c:if>
             
                 <form id="login-form" action="<c:url value="/j_spring_security_check" />" method="post" role="form" style="display: block;">
-	                
                   <div class="form-group">
                     <label for="username">Username</label>
                     <input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Username" value="${username}">

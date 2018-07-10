@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,5 +55,17 @@ public class KorisnikDAOImpl implements KorisnikDAO {
 		session.flush();
 		
 		mailService.posaljiMailZaRegistraciju(korisnik);
+	}
+
+	@Override
+	public Korisnik getKorisnikByEmail(String email) {
+		Session session = sessionFactory.getCurrentSession();
+		return (Korisnik)session.createCriteria(Korisnik.class).add(Restrictions.eq("email", email)).uniqueResult();
+	}
+
+	@Override
+	public Korisnik getKorisnikByUsername(String username) {
+		Session session = sessionFactory.getCurrentSession();
+		return (Korisnik)session.createCriteria(Korisnik.class).add(Restrictions.eq("username", username)).uniqueResult();
 	}
 }

@@ -7,4 +7,6 @@ import com.demo.mmapicerija.entities.Korisnik;
 public interface KorisnikDAO {
 	public List<Korisnik> getListaSvihKorisnika();
 	public void dodajKorisnika(Korisnik korisnik);
+	public Korisnik getKorisnikByEmail(String email);
+	public Korisnik getKorisnikByUsername(String username);
 }

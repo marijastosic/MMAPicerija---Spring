@@ -8,4 +8,5 @@ public interface PicaDAO {
 	public List<Pica> getListaSvihPica();
 	public List<Pica> getListaSvihAktivnihPica();
 	public Pica getPicaById(int id);
+	public void deletePicaById(int id);
 }

@@ -1,7 +1,5 @@
 package com.demo.mmapicerija;
 
-import java.text.DateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -22,8 +20,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.demo.mmapicerija.dao.KorisnikDAO;
 import com.demo.mmapicerija.dao.PicaDAO;
+import com.demo.mmapicerija.dao.StavkaKorpeDAO;
 import com.demo.mmapicerija.entities.Korisnik;
 import com.demo.mmapicerija.entities.Pica;
+import com.demo.mmapicerija.entities.StavkaKorpe;
 import com.demo.mmapicerija.entities.StavkaPorudzbine;
 import com.demo.mmapicerija.service.MailService;
 
@@ -41,7 +41,8 @@ public class HomeController {
 	@Autowired
 	private KorisnikDAO korisnikDao;
 	
-	
+	@Autowired
+	private StavkaKorpeDAO stavkaKorpeDao;
 	
 	/**
 	 * Simply selects the home view to render by returning its name.
@@ -69,24 +70,59 @@ public class HomeController {
 		return "meni";
 	}
 	
-	@RequestMapping("/meni/{id}")
+	@RequestMapping(value = "/meni/{id}", method = RequestMethod.GET)
 	public String prikazDetalja(@PathVariable(value = "id") int id, Model model) {
 		Pica pica = picaDao.getPicaById(id);
 				
-		model.addAttribute("kolicina", 1);
+		StavkaKorpe stavkaKorpe = new StavkaKorpe();
+		stavkaKorpe.setKolicina(1);
+		
 		model.addAttribute("pica", pica);
+		model.addAttribute("stavkaKorpe", stavkaKorpe);
 				
 		return "detalji";
 	}
 	
-	@RequestMapping(value = "/dodajUKorpu/{picaId}/{kolicina}")
-	public String dodajUKorpu(@PathVariable(value = "picaId") int picaId, @PathVariable(value="kolicina") int kolicina, Model model) {
-		Pica pica = picaDao.getPicaById(picaId);
-		StavkaPorudzbine sp = new StavkaPorudzbine();
-		sp.setKolicina(kolicina);
-		sp.setPicaId(pica);
+	@RequestMapping(value = "/dodajUKorpu/{id}", method = RequestMethod.POST)
+	public String dodajUKorpu(@Valid @ModelAttribute("stavkaKorpe") StavkaKorpe stavkaKorpe, @PathVariable(value = "id") int id, BindingResult result, Model model, HttpServletRequest request) {
+		Pica pica = picaDao.getPicaById(id);
+		stavkaKorpe.setPicaId(pica);
+		
+		Korisnik korisnik = korisnikDao.getKorisnikByUsername(request.getUserPrincipal().getName());
+		
+		stavkaKorpe.setKorisnikId(korisnik);
+		
+		stavkaKorpeDao.sacuvajStavkuKorpe(stavkaKorpe);
+		
+		StavkaKorpe stavkaKorpeNova = new StavkaKorpe();
+		stavkaKorpeNova.setKolicina(1);
+		model.addAttribute("pica", stavkaKorpe.getPicaId());
+		model.addAttribute("stavkaKorpe", stavkaKorpeNova);
 		
 		return "detalji";
+	}
+	
+	@RequestMapping(value = "/korpa", method = RequestMethod.GET)
+	public String korpa(Model model, HttpServletRequest request) {	
+		Korisnik korisnik = korisnikDao.getKorisnikByUsername(request.getUserPrincipal().getName());
+	    List<StavkaKorpe> listaStavkiKorpe = stavkaKorpeDao.procitajSveIzStavkeKorpe(korisnik);
+		model.addAttribute("listaStavkiKorpe", listaStavkiKorpe);
+		return "korpa";
+	}
+
+	@RequestMapping(value = "/ocistiKorpu", method = RequestMethod.GET)
+	public String ocistiKorpu(Model model, HttpServletRequest request) {
+		Korisnik korisnik = korisnikDao.getKorisnikByUsername(request.getUserPrincipal().getName());
+	    stavkaKorpeDao.ocistiKorpu(korisnik);
+		return "korpa";
+	}
+	@RequestMapping(value = "/obrisiStavku/{id}", method = RequestMethod.GET)
+	public String obrisiStavkuPoId(@PathVariable(value = "id") int id, Model model, HttpServletRequest request) {
+	    stavkaKorpeDao.obrisiStavkuKorpeById(id);
+	    Korisnik korisnik = korisnikDao.getKorisnikByUsername(request.getUserPrincipal().getName());
+	    List<StavkaKorpe> listaStavkiKorpe = stavkaKorpeDao.procitajSveIzStavkeKorpe(korisnik);
+		model.addAttribute("listaStavkiKorpe", listaStavkiKorpe);
+		return "korpa";
 	}
 	
 	@RequestMapping("/login")
@@ -98,14 +134,9 @@ public class HomeController {
         if (logout != null) {
             model.addAttribute("msg", "Uspešno ste se odjavili.");
         }
-
         return "login";
     }
-	
-	@RequestMapping(value = "/korpa", method = RequestMethod.GET)
-	public String korpa(Model model) {	
-		return "korpa";
-	}
+		
 	
 	@RequestMapping(value = "/registracija", method = RequestMethod.GET)
 	public String registracija(Model model) {
@@ -120,6 +151,20 @@ public class HomeController {
 		if(result.hasErrors()) {
 			return "registracija";
 		}
+		
+		Korisnik postojeciKorisnikSaEmailom = korisnikDao.getKorisnikByEmail(korisnik.getEmail());
+		Korisnik postojeciKorisnikSaUsername = korisnikDao.getKorisnikByUsername(korisnik.getUsername());
+		
+		if(postojeciKorisnikSaEmailom != null) {
+			model.addAttribute("error", "Postoji korisnik sa unetim email-om!");
+			return "registracija";
+		}
+		
+		if(postojeciKorisnikSaUsername != null) {
+			model.addAttribute("error", "Postoji korisnik sa unetim username-om!");
+			return "registracija";
+		}
+		
 		korisnikDao.dodajKorisnika(korisnik);
 		
 		model.addAttribute("msg", "Uspešno ste izvršili registraciju. Molimo Vas da se ulogujete:");

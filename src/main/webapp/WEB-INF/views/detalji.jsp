@@ -46,21 +46,22 @@
 
 					<br>
 
-					<c:set var="role" scope="page" value="${role}" />
-					<c:set var="url" scope="page" value="/product/productList" />
-					<c:if test="${role}">
-						<c:set var="url" scope="page" value="/admin/productInventory" />
-					</c:if>
 
 					<p>
+						
+
+
+						<form:form action="${pageContext.request.contextPath}/dodajUKorpu/${pica.id}" method="post" modelAttribute="stavkaKorpe">
 						<a href="<c:url value="/meni"/>" class="btn btn-default">Nazad</a>
-				
-						<input max="10" min="1" type="number" name="kolicina" value="${kolicina}">
-						<a href="<c:url value="/dodajUKorpu/${pica.id}/${kolicina}"/>" 
-							class="btn btn-warning btn-large" onclick="myFunction()"><span
-							class="glyphicon glyphicon-shopping-cart"></span> Dodaj u korpu</a> <a
-							href="<c:url value="/korpa" />" class="btn btn-default"><span
+							<form:input max="10" min="1" type="number" path="kolicina" value="${stavkaKorpe.kolicina}"/>
+							<button type="submit" class="btn btn-warning btn-large" onclick="myFunction()">
+								<span class="glyphicon glyphicon-shopping-cart"></span>
+								Dodaj u korpu
+							</button>
+							<a href="<c:url value="/korpa" />" class="btn btn-default"><span
 							class="glyphicon glyphicon-hand-right"></span> Vidite korpu</a>
+						</form:form>
+						
 					</p>
 				</div>
 			</div>

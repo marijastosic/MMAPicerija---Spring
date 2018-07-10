@@ -49,7 +49,7 @@ public class Porudzbina implements Serializable {
     @ManyToOne
     private Korisnik korisnikId;
     @OneToMany(mappedBy = "porudzbinaId")
-    private List<StavkaPorudzbine> picaPorudzbinaList;
+    private List<StavkaPorudzbine> stavkaPorudzbineList;
 
     public Porudzbina() {
     }
@@ -88,12 +88,12 @@ public class Porudzbina implements Serializable {
     }
 
     @XmlTransient
-    public List<StavkaPorudzbine> getPicaPorudzbinaList() {
-        return picaPorudzbinaList;
+    public List<StavkaPorudzbine> getStavkaPorudzbineList() {
+        return stavkaPorudzbineList;
     }
 
-    public void setPicaPorudzbinaList(List<StavkaPorudzbine> picaPorudzbinaList) {
-        this.picaPorudzbinaList = picaPorudzbinaList;
+    public void setStavkaPorudzbineList(List<StavkaPorudzbine> stavkaPorudzbineList) {
+        this.stavkaPorudzbineList = stavkaPorudzbineList;
     }
 
     @Override

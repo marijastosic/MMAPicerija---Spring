@@ -44,6 +44,10 @@ public class StavkaPorudzbine implements Serializable {
     @JoinColumn(name = "porudzbina_id", referencedColumnName = "id")
     @ManyToOne
     private Porudzbina porudzbinaId;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "ukupan_iznos")
+    private double ukupanIznos;
 
     public StavkaPorudzbine() {
     }
@@ -52,9 +56,10 @@ public class StavkaPorudzbine implements Serializable {
         this.id = id;
     }
 
-    public StavkaPorudzbine(Integer id, int kolicina) {
+    public StavkaPorudzbine(Integer id, int kolicina, double ukupanIznos) {
         this.id = id;
         this.kolicina = kolicina;
+        this.ukupanIznos = ukupanIznos;
     }
 
     public Integer getId() {
@@ -88,8 +93,16 @@ public class StavkaPorudzbine implements Serializable {
     public void setPorudzbinaId(Porudzbina porudzbinaId) {
         this.porudzbinaId = porudzbinaId;
     }
+    
+    public double getUkupanIznos() {
+		return ukupanIznos;
+	}
 
-    @Override
+	public void setUkupanIznos(double ukupanIznos) {
+		this.ukupanIznos = ukupanIznos;
+	}
+
+	@Override
     public int hashCode() {
         int hash = 0;
         hash += (id != null ? id.hashCode() : 0);

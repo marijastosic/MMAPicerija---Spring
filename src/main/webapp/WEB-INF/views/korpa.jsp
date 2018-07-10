@@ -18,7 +18,7 @@
 		<section class="container">
 			<div>
 				<div>
-					<a class="btn btn-danger pull-left"><span class="glyphicon glyphicon-remove-sign"></span> Očisti korpu</a>
+					<a href="<c:url value="/ocistiKorpu"/>"  class="btn btn-danger pull-left"><span class="glyphicon glyphicon-remove-sign"></span> Očisti korpu</a>
 					<a class="btn btn-success pull-right" href=""<c:url value="/placanje"/>""><span class="glyphicon glyphicon-shopping-cart"></span> Završi kupovinu</a>
 				</div>
 				<br><br>
@@ -30,7 +30,7 @@
 						<th>Ukupna cena</th>
 						<th>Obriši iz korpe</th>
 					</tr>
-					<c:forEach items="${listaStavki}" var="stavka">
+					<c:forEach items="${listaStavkiKorpe}" var="stavka">
 						<tr>
 							<td>${stavka.picaId.naziv}</td>
 							<td>${stavka.picaId.cena}</td>
