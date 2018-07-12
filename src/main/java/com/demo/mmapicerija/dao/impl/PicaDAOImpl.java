@@ -37,16 +37,38 @@ public class PicaDAOImpl implements PicaDAO {
 	public Pica getPicaById(int id) {
 		Session session = sessionFactory.getCurrentSession();
 		return (Pica)session.createCriteria(Pica.class)
+				.add(Restrictions.eq("id", id)).uniqueResult();
+	}
+	
+	@Override
+	public Pica getAktivnaPicaById(int id) {
+		Session session = sessionFactory.getCurrentSession();
+		return (Pica)session.createCriteria(Pica.class)
 				.add(Restrictions.eq("id", id))
 				.add(Restrictions.eq("aktivna", true)).uniqueResult();
 	}
 
 	@Override
-	public void deletePicaById(int id) {
+	public void obrisiPicuById(int id) {
 		Session session = sessionFactory.getCurrentSession();
 		Pica p = (Pica)session.createCriteria(Pica.class).add(Restrictions.eq("id", id)).uniqueResult();
+		session.delete(p);
 		session.flush();
 		
+	}
+
+	@Override
+	public void sacuvajPicu(Pica pica) {
+		Session session = sessionFactory.getCurrentSession();
+		session.save(pica);
+		session.flush();
+	}
+
+	@Override
+	public void dodajIzmeniPicu(Pica pica) {
+		Session session = sessionFactory.getCurrentSession();
+		session.saveOrUpdate(pica);
+		session.flush();	
 	}
 
 }

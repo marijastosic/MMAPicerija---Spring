@@ -52,7 +52,12 @@
 
 
 						<form:form action="${pageContext.request.contextPath}/dodajUKorpu/${pica.id}" method="post" modelAttribute="stavkaKorpe">
-						<a href="<c:url value="/meni"/>" class="btn btn-default">Nazad</a>
+						<security:authorize access="hasRole('ROLE_ADMIN')">
+							<a href="<c:url value="/admin/meni"/>" class="btn btn-default">Nazad</a>
+						</security:authorize>
+						<security:authorize access="!hasRole('ROLE_ADMIN')">
+							<a href="<c:url value="/meni"/>" class="btn btn-default">Nazad</a>
+						</security:authorize>
 							<form:input max="10" min="1" type="number" path="kolicina" value="${stavkaKorpe.kolicina}"/>
 							<button type="submit" class="btn btn-warning btn-large" onclick="myFunction()">
 								<span class="glyphicon glyphicon-shopping-cart"></span>

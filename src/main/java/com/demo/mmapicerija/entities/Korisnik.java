@@ -209,9 +209,13 @@ public class Korisnik implements Serializable {
         return true;
     }
 
-    @Override
-    public String toString() {
-        return "entities.Korisnik[ id=" + id + " ]";
-    }
+	@Override
+	public String toString() {
+		return "Korisnik [id=" + id + ", username=" + username + ", password=" + password + ", email=" + email
+				+ ", ime=" + ime + ", prezime=" + prezime + ", telefon=" + telefon + ", adresa=" + adresa + ", pol="
+				+ pol + "]";
+	}
+
+   
     
 }

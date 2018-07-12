@@ -146,9 +146,11 @@ public class Porudzbina implements Serializable {
         return true;
     }
 
-    @Override
-    public String toString() {
-        return "entities.Porudzbina[ id=" + id + " ]";
-    }
+	@Override
+	public String toString() {
+		return "Porudzbina [id=" + id + ", datum=" + datum + ", telefon=" + telefon + ", adresa=" + adresa
+				+ ", korisnikId=" + korisnikId + "]";
+	}
+
     
 }

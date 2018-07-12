@@ -9,6 +9,7 @@ import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +24,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.demo.mmapicerija.dao.KorisnikDAO;
 import com.demo.mmapicerija.dao.PicaDAO;
+import com.demo.mmapicerija.dao.PorudzbinaDAO;
 import com.demo.mmapicerija.dao.StavkaKorpeDAO;
 import com.demo.mmapicerija.dao.StavkaPorudzbineDAO;
 import com.demo.mmapicerija.entities.Korisnik;
 import com.demo.mmapicerija.entities.Pica;
+import com.demo.mmapicerija.entities.Porudzbina;
 import com.demo.mmapicerija.entities.StavkaKorpe;
 import com.demo.mmapicerija.entities.StavkaPorudzbine;
 import com.demo.mmapicerija.service.MailService;
@@ -47,6 +50,12 @@ public class HomeController {
 	
 	@Autowired
 	private StavkaKorpeDAO stavkaKorpeDao;
+	
+	@Autowired
+	private PorudzbinaDAO porudzbinaDao;
+	
+	@Autowired
+	private StavkaPorudzbineDAO stavkaPorudzbineDao;
 	
 	/**
 	 * Simply selects the home view to render by returning its name.
@@ -76,7 +85,7 @@ public class HomeController {
 	
 	@RequestMapping(value = "/meni/{id}", method = RequestMethod.GET)
 	public String prikazDetalja(@PathVariable(value = "id") int id, Model model) {
-		Pica pica = picaDao.getPicaById(id);
+		Pica pica = picaDao.getAktivnaPicaById(id);
 				
 		StavkaKorpe stavkaKorpe = new StavkaKorpe();
 		stavkaKorpe.setKolicina(1);
@@ -89,7 +98,7 @@ public class HomeController {
 	
 	@RequestMapping(value = "/dodajUKorpu/{id}", method = RequestMethod.POST)
 	public String dodajUKorpu(@Valid @ModelAttribute("stavkaKorpe") StavkaKorpe stavkaKorpe, @PathVariable(value = "id") int id, BindingResult result, Model model, HttpServletRequest request) {
-		Pica pica = picaDao.getPicaById(id);
+		Pica pica = picaDao.getAktivnaPicaById(id);
 		stavkaKorpe.setPicaId(pica);
 		
 		
@@ -161,11 +170,43 @@ public class HomeController {
 	}
 	
 	
-	@RequestMapping(value = "/kupovina", method = RequestMethod.GET)
-	public String kupovina(Model model, HttpServletRequest request) {	
-		Korisnik k = korisnikDao.getKorisnikByUsername(request.getUserPrincipal().getName());
-		System.out.println("KOr "+k.getIme());
-		model.addAttribute("k", k);
+	@RequestMapping(value = "/kupovina", method = RequestMethod.POST)
+	public String kupovina(@Valid @ModelAttribute("korisnik") Korisnik korisnik, BindingResult result, Model model, HttpServletRequest request) {	
+		
+		Porudzbina porudzbina = new Porudzbina();
+		porudzbina.setTelefon(korisnik.getTelefon());
+		porudzbina.setAdresa(korisnik.getAdresa());
+		porudzbina.setDatum(new Date());
+		korisnik = korisnikDao.getKorisnikByUsername(request.getUserPrincipal().getName());
+		porudzbina.setKorisnikId(korisnik);
+				
+		int porudzbinaId = porudzbinaDao.sacuvajPorudzbinu(porudzbina);
+		porudzbina = porudzbinaDao.getPorudzbinaById(porudzbinaId);
+		
+		List<StavkaKorpe> listaStavkiKorpe = stavkaKorpeDao.procitajSveIzStavkeKorpe(korisnik);
+		for(StavkaKorpe sk : listaStavkiKorpe) {
+			StavkaPorudzbine sp = new StavkaPorudzbine();
+			sp.setKolicina(sk.getKolicina());
+			sp.setPicaId(sk.getPicaId());
+			sp.setPorudzbinaId(porudzbina);
+			sp.setUkupanIznos(sp.getPicaId().getCena() * sp.getKolicina());
+			
+			stavkaPorudzbineDao.sacuvajStavkuPorudzbine(sp);
+			stavkaKorpeDao.obrisiStavkuKorpeById(sk.getId());
+		}
+		
+		String postovani = "";
+		if(korisnik.getPol().equals("Muški")) {
+			postovani = "Poštovani";
+		} else if(korisnik.getPol().equals("Ženski")) {
+			postovani = "Poštovana";
+		} else {
+			postovani = "Poštovani/a";
+		}
+		
+		model.addAttribute("postovani", postovani);
+		model.addAttribute("korisnik", korisnik);
+		
 		return "kupovina";
 	}
 	
