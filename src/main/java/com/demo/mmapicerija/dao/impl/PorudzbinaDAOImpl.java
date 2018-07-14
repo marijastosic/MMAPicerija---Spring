@@ -1,5 +1,8 @@
 package com.demo.mmapicerija.dao.impl;
 
+import java.util.List;
+
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
@@ -28,7 +31,19 @@ public class PorudzbinaDAOImpl implements PorudzbinaDAO {
 	@Override
 	public Porudzbina getPorudzbinaById(int id) {
 		Session session = sessionFactory.getCurrentSession();
-		return (Porudzbina)session.createCriteria(Porudzbina.class).add(Restrictions.eq("id", id)).uniqueResult();
+		Porudzbina porudzbina = (Porudzbina)session.createCriteria(Porudzbina.class).add(Restrictions.eq("id", id)).uniqueResult();
+		Hibernate.initialize(porudzbina.getStavkaPorudzbineList());
+		return porudzbina;
+	}
+
+	@Override
+	public List<Porudzbina> getSvePorudzbine() {
+		Session session = sessionFactory.getCurrentSession();
+		List<Porudzbina> listaPorudzina = session.createCriteria(Porudzbina.class).list();
+		for(Porudzbina p : listaPorudzina) {
+			Hibernate.initialize(p.getStavkaPorudzbineList());
+		}
+		return listaPorudzina;
 	}
 
 }

@@ -133,6 +133,14 @@ public class Porudzbina implements Serializable {
         return hash;
     }
 
+    public double getUkupanIznos() {
+    	double ukupanIznos = 0.0;
+    	for(StavkaPorudzbine sp : stavkaPorudzbineList) {
+    		ukupanIznos += sp.getUkupanIznos();
+    	}
+    	return ukupanIznos;
+    }
+    
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set

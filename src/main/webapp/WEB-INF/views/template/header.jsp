@@ -63,6 +63,7 @@
 					</security:authorize>
 					<security:authorize access="hasRole('ROLE_ADMIN')">
 						<li><a href="<c:url value="/admin/meni"/>">Meni - Admin</a></li>
+						<li><a href="<c:url value="/admin/svePorudzbine"/>">Porudžbine</a></li>
 					</security:authorize>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
@@ -74,7 +75,7 @@
 							class="glyphicon glyphicon-shopping-cart"></span> Korpa</a></li>
 					<c:if test="${pageContext.request.userPrincipal.name != null}">
 						<ul class="nav navbar-nav navbar-right">
-							<li><a href="#">Dobrodošli:
+							<li><a href="<c:url value="/profil"/>">Dobrodošli:
 									${pageContext.request.userPrincipal.name}</a></li>
 							<li><a href="<c:url value="/j_spring_security_logout" />">Odjavi
 									se</a></li>

@@ -23,7 +23,8 @@ public class MailServiceImpl implements MailService {
 		message.setTo(korisnik.getEmail());
 		message.setSubject("MMA picerija - uspešna registracija!");
 		message.setBcc("mmapicerija@gmail.com");
-		message.setText("Poštovani/a " + korisnik.getIme() + ",\n\nUspešno ste izvršili registraciju! Vaše korisničko ime je: " + korisnik.getUsername() + ".\n\nHvala što koristite naš sistem!");
+		String postovani = korisnik.getPol().equals("Muški") ? "Poštovani " : korisnik.getPol().equals("Ženski") ? "Poštovana " : "Poštovani/a ";
+		message.setText(postovani + korisnik.getIme() + ",\n\nUspešno ste izvršili registraciju! Vaše korisničko ime je: " + korisnik.getUsername() + ".\n\nHvala što koristite naš sistem!");
 
 		mailSender.send(message);
 		

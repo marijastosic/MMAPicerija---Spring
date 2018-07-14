@@ -68,4 +68,11 @@ public class KorisnikDAOImpl implements KorisnikDAO {
 		Session session = sessionFactory.getCurrentSession();
 		return (Korisnik)session.createCriteria(Korisnik.class).add(Restrictions.eq("username", username)).uniqueResult();
 	}
+
+	@Override
+	public void azurirajKorisnika(Korisnik korisnik) {
+		Session session = sessionFactory.getCurrentSession();
+		session.update(korisnik);
+		session.flush();
+	}
 }
