@@ -54,7 +54,6 @@ public class PicaDAOImpl implements PicaDAO {
 		Pica p = (Pica)session.createCriteria(Pica.class).add(Restrictions.eq("id", id)).uniqueResult();
 		session.delete(p);
 		session.flush();
-		
 	}
 
 	@Override

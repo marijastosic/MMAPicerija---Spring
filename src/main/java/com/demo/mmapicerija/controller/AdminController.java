@@ -90,14 +90,14 @@ public class AdminController {
 	@RequestMapping(value = "/svePorudzbine", method = RequestMethod.GET)
 	public String svePorudzbine(Model model) {
 		List<Porudzbina> listaPorudzbina = porudzbinaDao.getSvePorudzbine();
-
 		model.addAttribute("listaPorudzbina", listaPorudzbina);
 		return "svePorudzbine";
 	}
 
 	@RequestMapping(value = "/porudzbina/{id}", method = RequestMethod.GET)
 	public String detaljiPorudzbine(@PathVariable(value = "id") int id, Model model) {
-		model.addAttribute("porudzbina", porudzbinaDao.getPorudzbinaById(id));
+		Porudzbina porudzbina = porudzbinaDao.getPorudzbinaById(id);
+		model.addAttribute("porudzbina", porudzbina);
 		return "detaljiPorudzbine";
 	}
 }

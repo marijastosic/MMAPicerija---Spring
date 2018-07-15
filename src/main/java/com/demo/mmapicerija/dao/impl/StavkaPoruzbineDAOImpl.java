@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.demo.mmapicerija.dao.StavkaPorudzbineDAO;
 import com.demo.mmapicerija.entities.Korisnik;
-import com.demo.mmapicerija.entities.StavkaKorpe;
 import com.demo.mmapicerija.entities.StavkaPorudzbine;
 
 @Repository
@@ -27,7 +26,6 @@ public class StavkaPoruzbineDAOImpl implements StavkaPorudzbineDAO {
 		
 		session.save(stavkaPorudzbine);
 		session.flush();
-		
 	}
 
 	@Override

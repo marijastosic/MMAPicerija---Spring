@@ -1,6 +1,9 @@
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.text.DateFormat"%>
 <%@include file="template/header.jsp"%>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+
 
 <div id="fullscreen_bg" class="fullscreen_bg">
 	<div class="container">
@@ -9,6 +12,7 @@
 		<h4>Kupac: ${porudzbina.korisnikId.ime} ${porudzbina.korisnikId.prezime}</h4>
 		<h4>Adresa: ${porudzbina.adresa}</h4>
 		<h4>Telefon: ${porudzbina.telefon}</h4>
+		<h4>Datum: ${porudzbina.datumString}</h4>
 		<hr>
 		<table class="table table-hover table-striped">
 			<thead>

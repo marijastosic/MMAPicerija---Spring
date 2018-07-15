@@ -19,7 +19,7 @@
 						<td>${porudzbina.korisnikId.ime} ${porudzbina.korisnikId.prezime}</td>
 						<td>${porudzbina.adresa}</td>
 						<td>${porudzbina.telefon}</td>
-						<td>${porudzbina.datum}</td>
+						<td>${porudzbina.datumString}</td>
 						<td>${porudzbina.ukupanIznos}</td>
 						<td><a href="<c:url value="/admin/porudzbina/${porudzbina.id}"/>">Vidi porudžbinu</a></td>
 					</tr>

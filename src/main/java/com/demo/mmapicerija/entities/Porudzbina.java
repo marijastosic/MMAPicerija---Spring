@@ -6,8 +6,11 @@
 package com.demo.mmapicerija.entities;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,15 +19,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
@@ -133,14 +133,6 @@ public class Porudzbina implements Serializable {
         return hash;
     }
 
-    public double getUkupanIznos() {
-    	double ukupanIznos = 0.0;
-    	for(StavkaPorudzbine sp : stavkaPorudzbineList) {
-    		ukupanIznos += sp.getUkupanIznos();
-    	}
-    	return ukupanIznos;
-    }
-    
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
@@ -152,6 +144,30 @@ public class Porudzbina implements Serializable {
             return false;
         }
         return true;
+    }
+    
+    /**
+     * Metoda vraca ukupan iznos porudzbine.
+     * Prolazi kroz svaku stavku iz liste stavki i sabira ukupne iznose svake od njih.
+     * !!!!!!! Da bi se ova metoda koristila, neophodno je pre poziva metode inicijalizovati listu stavki porudzbine.
+     * (Hibernate.initialize(porudzbina.getStavkaPorudzbineList());)
+     * @return ukupanIznos
+     */
+    public double getUkupanIznos() {
+    	double ukupanIznos = 0.0;
+    	for(StavkaPorudzbine sp : stavkaPorudzbineList) {
+    		ukupanIznos += sp.getUkupanIznos();
+    	}
+    	return ukupanIznos;
+    }
+    
+    /**
+     * Metoda vraca datum u string obliku, formatiran kako nam odgovara.
+     * @return
+     */
+    public String getDatumString() {
+    	DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy.");
+    	return dateFormat.format(datum);
     }
 
 	@Override

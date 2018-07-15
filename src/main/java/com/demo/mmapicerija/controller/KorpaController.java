@@ -45,6 +45,8 @@ public class KorpaController {
 
 		StavkaKorpe stavkaIzBaze = stavkaKorpeDao.vratiStavkuZaPicuIKorisnika(pica, korisnik);
 
+		// Ukoliko u bazi vec imamo sacuvanu stavku korpe za odredjenu picu, nece se praviti
+		// dupli unos, vec se samo azurira kolicina.
 		if (stavkaIzBaze != null) {
 			stavkaIzBaze.setKolicina(stavkaIzBaze.getKolicina() + stavkaKorpe.getKolicina());
 			stavkaKorpeDao.azurirajStavku(stavkaIzBaze);

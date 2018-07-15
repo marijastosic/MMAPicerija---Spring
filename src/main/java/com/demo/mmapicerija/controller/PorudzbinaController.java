@@ -46,6 +46,29 @@ public class PorudzbinaController {
 		model.addAttribute("korisnik", korisnik);
 		return "proveraPodataka";
 	}
+	
+	@RequestMapping(value = "/racun", method = RequestMethod.POST)
+	public String racun(@Valid @ModelAttribute("korisnik") Korisnik korisnik, BindingResult result, Model model,
+			HttpServletRequest request) {
+		double ukupanIznos = 0.0;
+
+		Korisnik korisnikIzBaze = korisnikDao.getKorisnikByUsername(request.getUserPrincipal().getName());
+		for (StavkaKorpe sk : stavkaKorpeDao.procitajSveIzStavkeKorpe(korisnikIzBaze)) {
+			ukupanIznos += (sk.getPicaId().getCena() * sk.getKolicina());
+		}
+
+		model.addAttribute("listaStavkiKorpe", stavkaKorpeDao.procitajSveIzStavkeKorpe(korisnikIzBaze));
+
+		korisnik.setIme(korisnikIzBaze.getIme());
+		korisnik.setPrezime(korisnikIzBaze.getPrezime());
+		
+		model.addAttribute("korisnik", korisnik);
+		model.addAttribute("ukupanIznos", ukupanIznos);
+		DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy.");
+		model.addAttribute("datum", dateFormat.format(new Date()));
+
+		return "racun";
+	}
 
 	@RequestMapping(value = "/kupovina", method = RequestMethod.POST)
 	public String kupovina(@Valid @ModelAttribute("korisnik") Korisnik korisnik, BindingResult result, Model model,
@@ -88,26 +111,6 @@ public class PorudzbinaController {
 		return "kupovina";
 	}
 
-	@RequestMapping(value = "/racun", method = RequestMethod.POST)
-	public String racun(@Valid @ModelAttribute("korisnik") Korisnik korisnik, BindingResult result, Model model,
-			HttpServletRequest request) {
-		double ukupanIznos = 0.0;
-
-		Korisnik korisnikIzBaze = korisnikDao.getKorisnikByUsername(request.getUserPrincipal().getName());
-		for (StavkaKorpe sk : stavkaKorpeDao.procitajSveIzStavkeKorpe(korisnikIzBaze)) {
-			ukupanIznos += (sk.getPicaId().getCena() * sk.getKolicina());
-		}
-
-		model.addAttribute("listaStavkiKorpe", stavkaKorpeDao.procitajSveIzStavkeKorpe(korisnikIzBaze));
-
-		korisnik.setIme(korisnikIzBaze.getIme());
-		korisnik.setPrezime(korisnikIzBaze.getPrezime());
-		model.addAttribute("korisnik", korisnik);
-		model.addAttribute("ukupanIznos", ukupanIznos);
-		DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy.");
-		model.addAttribute("datum", dateFormat.format(new Date()));
-
-		return "racun";
-	}
+	
 
 }

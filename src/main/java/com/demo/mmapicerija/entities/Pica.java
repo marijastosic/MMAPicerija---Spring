@@ -70,7 +70,7 @@ public class Pica implements Serializable {
     @Column(name = "slika_url")
     private String slikaUrl;
     @OneToMany(mappedBy = "picaId")
-    private List<StavkaPorudzbine> picaPorudzbinaList;
+    private List<StavkaPorudzbine> stavkaPorudzbineList;
 
     public Pica() {
     }
@@ -164,12 +164,12 @@ public class Pica implements Serializable {
     }
 
     @XmlTransient
-    public List<StavkaPorudzbine> getPicaPorudzbinaList() {
-        return picaPorudzbinaList;
+    public List<StavkaPorudzbine> getStavkaPorudzbineList() {
+        return stavkaPorudzbineList;
     }
 
-    public void setPicaPorudzbinaList(List<StavkaPorudzbine> picaPorudzbinaList) {
-        this.picaPorudzbinaList = picaPorudzbinaList;
+    public void setStavkaPorudzbineList(List<StavkaPorudzbine> stavkaPorudzbineList) {
+        this.stavkaPorudzbineList = stavkaPorudzbineList;
     }
 
     @Override

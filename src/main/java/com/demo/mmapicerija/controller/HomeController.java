@@ -1,9 +1,6 @@
 package com.demo.mmapicerija.controller;
 
-import java.util.Locale;
-
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -11,18 +8,23 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class HomeController {
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String home(Locale locale, Model model) {
+	public String home() {
 		return "home";
 	}
 
 	@RequestMapping(value = "/oNama", method = RequestMethod.GET)
-	public String oNama(Model model) {
+	public String oNama() {
 		return "oNama";
 	}
 
 	@RequestMapping(value = "/kontakt", method = RequestMethod.GET)
-	public String kontakt(Model model) {
+	public String kontakt() {
 		return "kontakt";
+	}
+	
+	@RequestMapping(value = "/zabranjenPristup", method = RequestMethod.GET)
+	public String zabranjenPristup() {
+		return "zabranjenPristup";
 	}
 
 }
