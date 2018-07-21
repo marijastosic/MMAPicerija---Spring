@@ -31,16 +31,7 @@
     <h3>Marija Stošić <br></h3>
     <h4><span class="glyphicon glyphicon-earphone btn btn-lg"></span>061/285-73-40 </h4>
     <h4><span class="glyphicon glyphicon-envelope btn btn-lg"></span> mary.mary_94@hotmail.com </h4>
-    <hr>
-    <img src="<c:url value="/resources/images/ana.PNG"/>" style="width: 170px; height: 170px;"class="rounded"/>
-    <h3>Ana Đokić <br></h3>
-    <h4><span class="glyphicon glyphicon-earphone btn btn-lg"></span>069/140-79-84 </h4>
-    <h4><span class="glyphicon glyphicon-envelope btn btn-lg"></span> annadjokic@yahoo.com </h4>
-    <hr>
-    <img src="<c:url value="/resources/images/milica.PNG"/>" style="width: 170px; height: 170px;"class="rounded float-right"/>
-    <h3>Milica Tmušić <br></h3>
-    <h4><span class="glyphicon glyphicon-earphone btn btn-lg"></span>064/328-78-33 </h4>
-    <h4><span class="glyphicon glyphicon-envelope btn btn-lg"></span> tmusicmilica@outlook.com </h4>
+    
 </center>
 
 <%@include file="template/footer.jsp"%>
